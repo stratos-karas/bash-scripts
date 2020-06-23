@@ -1,0 +1,10 @@
+#! /bin/bash
+
+update=$(curl -s https://corona-stats.online/greece?minimal=true | grep Greece | sed -r s/' '+/' '/g)
+echo $update > .covid19.log
+
+newCases=$(awk '{print $8}' .covid19.log)
+newDeaths=$(awk '{print $13}' .covid19.log)
+activeCases=$(awk '{print $18}' .covid19.log)
+
+echo -e "\e[47m \e[30m Active Cases: $activeCases \e[0m \e[44m New Cases: $newCases \e[0m \e[41m New Deaths: $newDeaths \e[0m"

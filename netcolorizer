@@ -1,0 +1,15 @@
+#! /bin/bash
+clear
+while [ 1 ];do
+
+	iwconfig wlan0 > .netlog
+	update=$(sed -n '4'p .netlog | sed -r s/'          '/''/g)
+
+	col1=$(echo $update | cut -d ' ' -f 1,2)
+	col2=$(echo $update | cut -d ' ' -f 3,4,5)
+	col3=$(echo $update | cut -d ' ' -f 6,7,8)
+
+	echo -ne "\r\e[47m \e[30m $col1 \e[0m \e[44m $col2 \e[0m \e[41m $col3 \e[0m"
+
+	sleep 0.1
+done
