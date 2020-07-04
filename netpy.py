@@ -12,7 +12,7 @@ import re
 os.system("touch .netlog")
 
 # Check the wireless network interface
-net_interfaces = subprocess.Popen(['ifconfig'], stdout=subprocess.PIPE).communicate()[0]
+net_interfaces = str(subprocess.Popen(['ifconfig'], stdout=subprocess.PIPE).communicate()[0])
 
 # Find the system's wlan interface
 wlan_interface = re.search("wlan0", net_interfaces)
@@ -99,7 +99,7 @@ while 1:
         link_quality_out = ""
 
     if signal_level_span != None and noise_level_span != None:
-        signal_level_out = line[signal_level_span[0], noise_level_span[0]-1]
+        signal_level_out = line[signal_level_span[0]:noise_level_span[0]-1]
     elif signal_level_span != None:
         signal_level_out = line[signal_level_span[0]:]
     else:
@@ -120,7 +120,9 @@ while 1:
     cols = int(subprocess.Popen(['tput', 'cols'], stdout=subprocess.PIPE).communicate()[0])
     out = "\033[47m \033[30m" + link_quality_out + "\033[0m" + "\033[44m " + signal_level_out + "\033[0m" + "\033[41m " + noise_level_out + "\033[0m"
     if len(out) > cols:
-        out = out[:cols]
+        # Flush the color so that the terminal
+        # will return to its default setting
+        out = out[:cols] + "\033[0m"
     
     sys.stdout.write("\r" + out)
     sys.stdout.flush()
