@@ -118,7 +118,10 @@ while 1:
     # Create dynamic string based on terminal columns number
     # Terminal columns
     cols = int(subprocess.Popen(['tput', 'cols'], stdout=subprocess.PIPE).communicate()[0])
-    out = "\033[47m \033[30m" + link_quality_out + "\033[0m" + "\033[44m " + signal_level_out + "\033[0m" + "\033[41m " + noise_level_out + "\033[0m"
+    out = "\033[47m \033[30m" + link_quality_out + "\033[0m" +\
+            "\n\033[3;0H\r" + "\033[44m " + signal_level_out + "\033[0m" +\
+            "\n\033[4;0H\r" + "\033[41m " + noise_level_out + "\033[0m\033[2;0H"
+    
     if len(out) > cols:
         # Flush the color so that the terminal
         # will return to its default setting
